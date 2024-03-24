@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
-import axios from 'axios'
+import { useEffect } from 'react';
 
+import axios from 'axios'
 const ResearchBar = () => {
 
-    const axios = require('axios');
 
     let data = JSON.stringify({
         keyword: "ai",
@@ -21,11 +21,14 @@ const ResearchBar = () => {
         data: data
     }
 
-    axios.request(config).then((response) => {
-        console.log(response.data);
-    }).catch((error) => {
-        console.log(error);
-    })
+
+    useEffect(() => {
+        axios.request(config).then((response) => {
+            console.log(response.data);
+        }).catch((error) => {
+            console.log(error);
+        })
+    },[])
 
 
 
