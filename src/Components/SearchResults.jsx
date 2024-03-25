@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Book from "./Book"
+import ToggleButton from './ToggleButton';
 
 const SearchResults = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [isAcademic, setAcademic] = useState(false);
-    const [searchKeyword, setSearchKeyword] = useState("ai");
+    const [isAcademic, setisAcademic] = useState(true);
+    const [searchKeyword, setSearchKeyword] = useState("");
 
+    const toggleButton = () => {
+        setisAcademic(!isAcademic);
+      };
+
+      
     const handleSearchInput = async () => {
         let config = {
             method: 'post',
@@ -38,8 +44,24 @@ const SearchResults = () => {
     return (
         <div className='w-full flex flex-col items-center justify-center'>
             <div className="flex items-center mt-10 w-full gap-1 max-w-3xl">
-                <input onChange={(e) => setSearchKeyword(e.target.value + isAcademicc ? " academic" : " non academic" )}
-                    type="search" className="font-medium text-center w-full px-4 py-2 h-14 rounded-md bg-blue-100 text-black focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Climate Change" />
+                <div className=' w-full flex'>
+                    <input onChange={(e) => setSearchKeyword(isAcademic ? "what is" + e.target.value : e.target.value)}
+                        type="search" className="font-medium text-center w-full px-4 py-2 h-14 rounded-md bg-blue-100 text-black focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Climate Change" />
+                    <div className="flex items-center absolute">
+                        <button
+                            className={`w-12 h-6 flex items-center justify-center rounded-full ${isAcademic ? 'bg-blue-500' : 'bg-gray-300'
+                                }`}
+                            onClick={toggleButton}
+                        >
+                            <div
+                                className={`w-5 h-5 rounded-full bg-white shadow-md transform transition-transform ${isAcademic ? 'translate-x-full' : ''
+                                    }`}
+                            ></div>
+                        </button>
+                        <span className="ml-2">{isAcademic ? 'Academic' : 'Non-Academic'}</span>
+                    </div>
+                </div>
+
                 <button
                     onClick={handleSearchInput}
                     className="flex items-center px-4 py-2 h-14 rounded-md bg-blue-200 text-white hover:bg-blue-500 focus:outline-none hover:focus:ring-blue-500">
@@ -49,14 +71,15 @@ const SearchResults = () => {
                     </svg>
                 </button>
             </div>
-
-            <div className='flex flex-col gap-5'>
+            <br />
+            {loading ? <p className=' font-semibold text-red-500'>Loading...</p> : <div className='flex flex-col gap-5 max-w-3xl'>
                 {
-                    data && data?.map((book, idx) => (
+                    data ? data?.map((book, idx) => (
                         <Book key={idx} data={book} />
                     ))
+                    : <p className=' font-semibold text-red-500'>Error in Fetching data from API !!!</p>
                 }
-            </div>
+            </div>}
         </div>
     )
 }

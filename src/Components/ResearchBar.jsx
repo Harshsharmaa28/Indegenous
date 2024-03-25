@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import SearchResults from "./SearchResults"
 
+
 const ResearchBar = () => {
     const [selectedButton, setSelectedButton] = useState("Research");
     const [field, setfield] = useState(false);
